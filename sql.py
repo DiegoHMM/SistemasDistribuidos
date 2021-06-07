@@ -296,3 +296,7 @@ for table_name in [
     COUNTRY_TABLE_NAME,
 ]:
     result = client.sql(DROP_TABLE_QUERY.format(table_name))
+
+
+while True:
+    print('HMMMMM SISTEMA DISTRIBUIDO')
