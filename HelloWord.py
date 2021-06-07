@@ -1,7 +1,7 @@
 from pyignite import Client
 from matplotlib.backends.backend_pdf import PdfPages
 client = Client()
-client.connect('127.0.0.1', 10800)
+client.connect('10.128.0.15', 10800)
 
 import matplotlib.pyplot as plt
 import numpy as np
