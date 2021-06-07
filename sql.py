@@ -193,7 +193,7 @@ LANGUAGE_DATA = [
 
 # establish connection
 client = Client()
-client.connect('10.48.0.238', 10800)
+client.connect('34.72.162.100', 10800)
 
 # create tables
 for query in [
