@@ -55,4 +55,8 @@ pp.savefig(plot1)
 
 pp.close()
 
+while True:
+      print("hmm mingal")
+
+      
 client.close()
