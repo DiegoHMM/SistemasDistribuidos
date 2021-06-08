@@ -297,15 +297,15 @@ for table_name in [
 ]:
     result = client.sql(DROP_TABLE_QUERY.format(table_name))
 
-my_cache = client.create_cache('my cache')
+teste = client.create_cache("teste")
 
 for x in range(10000000):
     print(x)
-    my_cache.put(x,"hmmm coxa de frango")
+    teste.put(x,"hmmm coxa de frango")
     
 
 for x in range(10000000):
-    value = my_cache.get(x)
+    value = teste.get(x)
     print(value)
 
-my_cache.destroy()
+teste.destroy()
