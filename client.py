@@ -15,7 +15,8 @@ def read_file(file_name):
         for line in f:
             for word in line.split():
                 try:
-                    client_x.put(word,random.randint(0,500))
+
+                    client_x.put(word,5)
                     print("Adicionando " + word)
                 except:
                     print(word + " ja existe")
