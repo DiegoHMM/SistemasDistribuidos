@@ -7,7 +7,10 @@ import random
 client = Client()
 client.connect('34.72.162.100', 10800)
 
-client_cache = client.create_cache("client_cache")
+try:
+    client_cache = client.create_cache("client_cache")
+except:
+    client_cache.destroy()
 
 def read_file(file_name):
     with open(file_name,'r',encoding="utf8") as f:
@@ -46,6 +49,7 @@ reader_five.start()
 
 searcher_one.start()
 
+client_cache.destroy()
 '''
 testim = client.create_cache("testim")
 
