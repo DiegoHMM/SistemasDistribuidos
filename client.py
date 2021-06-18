@@ -7,7 +7,7 @@ import random
 client = Client()
 client.connect('34.72.162.100', 10800)
 
-client_z = client.create_cache("client_z")
+client_1 = client.create_cache("client_1")
 
 
 def read_file(file_name):
@@ -16,7 +16,7 @@ def read_file(file_name):
             for word in line.split():
                 try:
 
-                    client_z.put(word,5)
+                    client_1.put(word,5)
                     print("Adicionando " + word)
                 except:
                     print(word + " ja existe")
@@ -27,7 +27,7 @@ def search_word(file_name):
         for line in f:
             for word in line.split():
                 try:
-                    client_z.get(word)
+                    client_1.get(word)
                     print("******************")
                     print("Achou " + word)
                     print("******************")
