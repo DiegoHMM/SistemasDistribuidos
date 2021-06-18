@@ -20,7 +20,11 @@ def search_word(file_name):
     with open(file_name,'r',encoding="utf8") as f:
         for line in f:
             for word in line.split():
-                client_cache.get(word)
+                try:
+                    client_cache.get(word)
+                    print("Achou" + word)
+                except:
+                    print("Nao achou" + word)
                 
                 
 
