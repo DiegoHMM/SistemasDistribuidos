@@ -7,7 +7,7 @@ import random
 client = Client()
 client.connect('34.72.162.100', 10800)
 
-client_ca = client.create_cache("client_ca")
+client_x = client.create_cache("client_x")
 
 
 def read_file(file_name):
@@ -15,9 +15,9 @@ def read_file(file_name):
         for line in f:
             for word in line.split():
                 try:
-                    client_ca.put(word,random.randint(0,500))
+                    client_x.put(word,random.randint(0,500))
                 except:
-                    print(word + "ja existe")
+                    print(word + " ja existe")
 
 
 def search_word(file_name):
@@ -25,8 +25,10 @@ def search_word(file_name):
         for line in f:
             for word in line.split():
                 try:
-                    client_ca.get(word)
+                    client_x.get(word)
+                    print("******************")
                     print("Achou " + word)
+                    print("******************")
                 except:
                     print("Nao achou " + word)
                 
@@ -50,18 +52,4 @@ reader_five.start()
 
 searcher_one.start()
 
-client_ca.destroy()
-'''
-testim = client.create_cache("testim")
-
-for x in range(10000000):
-    print(x)
-    testim.put(x,"hmmm coxa de frango")
-    
-
-for x in range(10000000):
-    value = testim.get(x)
-    print(value)
-
-testim.destroy()
-'''
+client_x.destroy()
