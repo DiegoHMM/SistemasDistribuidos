@@ -5,7 +5,7 @@ import random
 
 #establish connection
 client = Client()
-client.connect('34.72.162.100', 8080)
+client.connect('34.72.162.100', 10800)
 
 client_1 = client.get_cache("client_1")
 
