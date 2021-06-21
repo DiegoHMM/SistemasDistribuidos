@@ -7,7 +7,7 @@ import random
 client = Client()
 client.connect('34.72.162.100', 10800)
 
-client_1 = client.create_cache("client_1")
+client_1 = client.get_cache("client_1")
 
 
 def read_file(file_name):
