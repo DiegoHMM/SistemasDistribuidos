@@ -1,17 +1,30 @@
-# Examples
+## Visualizacao do dashboard
+# NO CMD:
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
 
-This directory contains the following example files:
+	kubectl proxy
 
-- `binary_basics.py` − basic operations with Complex objects,
-- `binary_types.py` - read SQL table as a key-value cache,
-- `create_binary.py` − create SQL row with key-value operation,
-- `failover.py` − fail-over connection to Ignite cluster,
-- `get_and_put.py` − basic key-value operations,
-- `migrate_binary.py` − work with Complex object schemas,
-- `scans.py` − cache scan operation,
-- `sql.py` − use Ignite SQL,
-- `type_hints.py` − type hints.
+# no GCP:
 
-For the explanation of the examples please refer to the
-[Examples of usage](https://apache-ignite-binary-protocol-client.readthedocs.io/en/latest/examples.html)
-section of the `pyignite` documentation.
+	gcloud auth application-default print-access-token
+
+
+
+## Links uteis no dashboard local:
+
+	http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/node?namespace=default
+
+	http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/replicaset/ignite/ignite-cluster-59bf6959bd?namespace=ignite
+
+	http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/pod?namespace=ignite
+
+##Redimensionamento do cluster:
+
+	gcloud init
+
+	gcloud container clusters resize cluster-2 --node-pool default-pool --num-nodes 3
+
+##Escalonamento de pods:
+
+	kubectl scale deployment ignite-cluster --replicas=3 -n ignite
+	kubectl scale sts ignite-cluster --replicas=3 -n ign
