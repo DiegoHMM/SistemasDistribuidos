@@ -1,10 +1,10 @@
-# Visualizacao do dashboard
-## NO CMD:
+# Visualizacao do dashboard:
+## No CMD:
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
 
 	kubectl proxy
 
-## no GCP:
+## No GCP:
 
 	gcloud auth application-default print-access-token
 
