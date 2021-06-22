@@ -24,7 +24,7 @@
 
 	gcloud container clusters resize cluster-2 --node-pool default-pool --num-nodes 3
 
-##Escalonamento de pods:
+## Escalonamento de pods:
 
 	kubectl scale deployment ignite-cluster --replicas=3 -n ignite
 	kubectl scale sts ignite-cluster --replicas=3 -n ign
