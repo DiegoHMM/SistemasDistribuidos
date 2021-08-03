@@ -11,10 +11,10 @@ public class DiegoAppl {
 
     //Broker info
     public final int BROKER_PORT = 8080;
-    public final String BROKER_ADDRESS = "localhost";
+    public final String BROKER_ADDRESS = "172.31.57.206";
     //Client info
     public final int CLIENT_PORT = 8082;
-    public final String CLIENT_ADDRESS = "localhost";
+    public final String CLIENT_ADDRESS = "172.31.7.113";
     public final String CLIENT_NAME = "Diego";
     //message contents
     public int myLogId;
@@ -268,10 +268,9 @@ public class DiegoAppl {
     }
 
     public List<Message> removeTrash(List<Message> log){
-        log.removeIf(msg -> msg.getContent().contains("localhost"));
-        log.removeIf(msg -> msg.getContent().contains("34.200.218.45"));
-        log.removeIf(msg -> msg.getContent().contains("52.3.234.190"));
-        log.removeIf(msg -> msg.getContent().contains("3.239.77.147"));
+        log.removeIf(msg -> msg.getContent().contains("172.31.7.113"));
+        log.removeIf(msg -> msg.getContent().contains("172.31.10.165"));
+        log.removeIf(msg -> msg.getContent().contains("172.31.1.184"));
         
         return log;
     }
