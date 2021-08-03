@@ -269,6 +269,10 @@ public class DiegoAppl {
 
     public List<Message> removeTrash(List<Message> log){
         log.removeIf(msg -> msg.getContent().contains("localhost"));
+        log.removeIf(msg -> msg.getContent().contains("34.200.218.45"));
+        log.removeIf(msg -> msg.getContent().contains("52.3.234.190"));
+        log.removeIf(msg -> msg.getContent().contains("3.239.77.147"));
+        
         return log;
     }
 

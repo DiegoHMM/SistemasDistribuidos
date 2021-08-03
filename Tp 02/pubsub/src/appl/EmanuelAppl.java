@@ -47,11 +47,11 @@ public class EmanuelAppl {
 
     
     public EmanuelAppl(boolean flag) {
-        // Constrói um Client
+        // Constrï¿½i um Client
         PubSubClient usuarioNetflix = new PubSubClient(CLIENT_ADDRESS, CLIENT_PORT);
         // Se inscreve no broker
         usuarioNetflix.subscribe(BROKER_ADDRESS, BROKER_PORT);
-        // Simulando o tempo de inscrição
+        // Simulando o tempo de inscriï¿½ï¿½o
         sleep(3000,"");
         // Recupera o log
         List<Message> log = usuarioNetflix.getLogMessages();
@@ -59,7 +59,7 @@ public class EmanuelAppl {
         // Imprime o log
         System.out.println("Log List (" + CLIENT_NAME + "):");
         printLog(log);
-        // Verificar se o log está vazio
+        // Verificar se o log estï¿½ vazio
         boolean flag_log_vazio = true;
         Iterator<Message> it = log.iterator();
         while(it.hasNext() && flag_log_vazio) {
@@ -78,7 +78,7 @@ public class EmanuelAppl {
         for(int k=0; k<3; k++) {
             // 1- fazer o primeiro publish de QUERO ASSISTIR um filme aleatorio do catalogo
             int movieIndex = new Random().nextInt(CATALOGUE.length);
-            //Se o log estiver vazio, ele publicará a mensagem e será setado para ser o próximo que quer assistir
+            //Se o log estiver vazio, ele publicarï¿½ a mensagem e serï¿½ setado para ser o prï¿½ximo que quer assistir
             //Nota: estamos considerando log vazio aquele que ninguem tentou assistir algo
             if (flag_log_vazio) {
                 String msg =
@@ -96,15 +96,15 @@ public class EmanuelAppl {
                 flag_log_vazio = false;
                 myLogId = log.size()+1;
             } else {
-                // Se o log não estiver vazio ele irá encontrar o ultimo conteudo do
+                // Se o log nï¿½o estiver vazio ele irï¿½ encontrar o ultimo conteudo do
                 // log que contenha uma mensagem com os estados
                 log = usuarioNetflix.getLogMessages();
                 log = removeTrash(log);
                 String[] contentSplit = getLastContentSplited(log);
 
-                // Após encontrar o ultimo conteudo que tenha algum estado na mensagem
-                // se a posição que representa quem é o proximo a assistir for maior que zero
-                // ou seja, já temos um próximo a assistir definido, apenas manteremos o valor das posições finais do conteudo
+                // Apï¿½s encontrar o ultimo conteudo que tenha algum estado na mensagem
+                // se a posiï¿½ï¿½o que representa quem ï¿½ o proximo a assistir for maior que zero
+                // ou seja, jï¿½ temos um prï¿½ximo a assistir definido, apenas manteremos o valor das posiï¿½ï¿½es finais do conteudo
                 if (Integer.parseInt(contentSplit[3]) > 0) {
                     String msg =
                             CLIENT_NAME + SEPARATOR +
@@ -131,8 +131,8 @@ public class EmanuelAppl {
                     }
 
                 }
-                // se a posição que representa quem é o proximo a assistir for zero
-                // então podemos definir que o próximo a assistir será ele mesmo
+                // se a posiï¿½ï¿½o que representa quem ï¿½ o proximo a assistir for zero
+                // entï¿½o podemos definir que o prï¿½ximo a assistir serï¿½ ele mesmo
                 else {
                     String msg =
                             CLIENT_NAME + SEPARATOR +
@@ -268,6 +268,9 @@ public class EmanuelAppl {
 
     public List<Message> removeTrash(List<Message> log){
         log.removeIf(msg -> msg.getContent().contains("localhost"));
+        log.removeIf(msg -> msg.getContent().contains("34.200.218.45"));
+        log.removeIf(msg -> msg.getContent().contains("52.3.234.190"));
+        log.removeIf(msg -> msg.getContent().contains("3.239.77.147"));
         return log;
     }
 
