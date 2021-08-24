@@ -1,2 +1,2 @@
-# simplepubsub
-representa uma solução pub/sub simples para uso na disciplina BCC 362 - sistemas distribuídos
+# Publisher/Subscriber Pattern
+Publisher/Subscriber pattern with a custom protocol
