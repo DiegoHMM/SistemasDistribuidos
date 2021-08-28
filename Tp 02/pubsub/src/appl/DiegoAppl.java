@@ -11,10 +11,10 @@ public class DiegoAppl {
 
     //Broker info
     public final int BROKER_PORT = 8080;
-    public final String BROKER_ADDRESS = "172.31.57.206";
+    public final String BROKER_ADDRESS = "localhost";//"54.227.20.6";
     //Client info
     public final int CLIENT_PORT = 8082;
-    public final String CLIENT_ADDRESS = "172.31.7.113";
+    public final String CLIENT_ADDRESS = "localhost";
     public final String CLIENT_NAME = "Diego";
     //message contents
     public int myLogId;
@@ -67,8 +67,8 @@ public class DiegoAppl {
             String content = aux.getContent();
             if(
                     content.contains("QueroAssistir") ||
-                            content.contains("Assistindo") ||
-                            content.contains("AcabeiDeAssistir")
+                    content.contains("Assistindo") ||
+                    content.contains("AcabeiDeAssistir")
             ) {
                 flag_log_vazio = false;
             }
@@ -83,11 +83,11 @@ public class DiegoAppl {
             if (flag_log_vazio) {
                 String msg =
                         CLIENT_NAME + SEPARATOR +
-                                ESTADO_1 + SEPARATOR +
-                                CATALOGUE[movieIndex] + SEPARATOR +
-                                (log.size()+1) + SEPARATOR +
-                                "0" + SEPARATOR +
-                                "0";
+                        ESTADO_1 + SEPARATOR +
+                        CATALOGUE[movieIndex] + SEPARATOR +
+                        (log.size()+1) + SEPARATOR +
+                        "0" + SEPARATOR +
+                        "0";
                 usuarioNetflix.publish(
                         msg,
                         BROKER_ADDRESS,
@@ -108,11 +108,11 @@ public class DiegoAppl {
                 if (Integer.parseInt(contentSplit[3]) > 0) {
                     String msg =
                             CLIENT_NAME + SEPARATOR +
-                                    ESTADO_1 + SEPARATOR +
-                                    CATALOGUE[movieIndex] + SEPARATOR +
-                                    contentSplit[3] + SEPARATOR +
-                                    contentSplit[4] + SEPARATOR +
-                                    contentSplit[5];
+                            ESTADO_1 + SEPARATOR +
+                            CATALOGUE[movieIndex] + SEPARATOR +
+                            contentSplit[3] + SEPARATOR +
+                            contentSplit[4] + SEPARATOR +
+                            contentSplit[5];
                     usuarioNetflix.publish(
                             msg,
                             BROKER_ADDRESS,
@@ -123,6 +123,7 @@ public class DiegoAppl {
                     log = usuarioNetflix.getLogMessages();
                     log = removeTrash(log);
 
+                    // aqui verificamos qual a posição no log a mensagem foi publicada para salvar esse ID para controle
                     for(int z=log.size()-1; z>=0 && !flag_achou; z--) {
                         if (log.get(z).getContent().equals(msg)) {
                             myLogId = z+1;
@@ -136,11 +137,11 @@ public class DiegoAppl {
                 else {
                     String msg =
                             CLIENT_NAME + SEPARATOR +
-                                    ESTADO_1 + SEPARATOR +
-                                    CATALOGUE[movieIndex] + SEPARATOR +
-                                    (log.size() + 1) + SEPARATOR +
-                                    contentSplit[4] + SEPARATOR +
-                                    contentSplit[5];
+                            ESTADO_1 + SEPARATOR +
+                            CATALOGUE[movieIndex] + SEPARATOR +
+                            (log.size() + 1) + SEPARATOR +
+                            contentSplit[4] + SEPARATOR +
+                            contentSplit[5];
                     usuarioNetflix.publish(
                             msg,
                             BROKER_ADDRESS,
@@ -151,6 +152,7 @@ public class DiegoAppl {
                     log = usuarioNetflix.getLogMessages();
                     log = removeTrash(log);
 
+                    // aqui verificamos qual a posição no log a mensagem foi publicada para salvar esse ID para controle
                     for(int z=log.size()-1; z>=0 && !flag_achou; z--) { //get
                         if (log.get(z).getContent().equals(msg)) {
                             myLogId = z+1;
@@ -166,10 +168,12 @@ public class DiegoAppl {
                 log = usuarioNetflix.getLogMessages();
                 log = removeTrash(log);
                 String[] lastContent = getLastContentSplited(log);
+                // verificação se é a minha vez de assitir
                 if (Integer.parseInt(lastContent[3]) == myLogId && Integer.parseInt(lastContent[4]) == 0) {
                     myTurn = true;
                     boolean achei = false;
                     int nextId = 0;
+                    // como é a minha vez, agora iremos procurar o próximo depois de mim a assistir
                     for (int i = myLogId ; i < log.size() && !achei; i++) {
                         if (log.get(i).getContent().contains("QueroAssistir")) {
                             nextId = i+1;
@@ -178,11 +182,11 @@ public class DiegoAppl {
                     }
                     String msg =
                             CLIENT_NAME + SEPARATOR +
-                                    ESTADO_2 + SEPARATOR +
-                                    CATALOGUE[movieIndex] + SEPARATOR +
-                                    nextId + SEPARATOR +
-                                    myLogId + SEPARATOR +
-                                    lastContent[5];
+                            ESTADO_2 + SEPARATOR +
+                            CATALOGUE[movieIndex] + SEPARATOR +
+                            nextId + SEPARATOR +
+                            myLogId + SEPARATOR +
+                            lastContent[5];
                     usuarioNetflix.publish(
                             msg,
                             BROKER_ADDRESS,
@@ -196,13 +200,14 @@ public class DiegoAppl {
                     log = removeTrash(log);
                     lastContent = getLastContentSplited(log);
 
+                    // agora avisaremos que o filme acabou
                     msg =
                             CLIENT_NAME + SEPARATOR +
-                                    ESTADO_3 + SEPARATOR +
-                                    CATALOGUE[movieIndex] + SEPARATOR +
-                                    lastContent[3] + SEPARATOR +
-                                    "0" + SEPARATOR +
-                                    myLogId;
+                            ESTADO_3 + SEPARATOR +
+                            CATALOGUE[movieIndex] + SEPARATOR +
+                            lastContent[3] + SEPARATOR +
+                            "0" + SEPARATOR +
+                            myLogId;
                     usuarioNetflix.publish(
                             msg,
                             BROKER_ADDRESS,
@@ -268,10 +273,7 @@ public class DiegoAppl {
     }
 
     public List<Message> removeTrash(List<Message> log){
-        log.removeIf(msg -> msg.getContent().contains("172.31.7.113"));
-        log.removeIf(msg -> msg.getContent().contains("172.31.10.165"));
-        log.removeIf(msg -> msg.getContent().contains("172.31.1.184"));
-        
+        log.removeIf(msg -> msg.getContent().contains("localhost"));
         return log;
     }
 
