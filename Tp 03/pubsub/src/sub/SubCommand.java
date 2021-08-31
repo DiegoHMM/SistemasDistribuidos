@@ -38,6 +38,7 @@ public class SubCommand implements PubSubCommand {
                 System.out.println(syncSubMsg.getContent());
 
             } catch (Exception e) {
+                System.out.println(e);
                 System.out.println("Cannot sync with backup - subscribe service");
             }
 

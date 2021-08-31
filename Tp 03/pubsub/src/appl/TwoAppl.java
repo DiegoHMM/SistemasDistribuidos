@@ -1,21 +1,12 @@
 package appl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-
 import core.Message;
 
-public class EmanuelAppl {
+import java.util.*;
 
-    //Broker info
-    public final int BROKER_PORT = 8080;
-    public final String BROKER_ADDRESS = "localhost";//"54.227.20.6";
-    //Client info
-    public final int CLIENT_PORT = 8083;
-    public final String CLIENT_ADDRESS = "localhost";
-    public final String CLIENT_NAME = "Emanuel";
+public class TwoAppl {
+
+
     //message contents
     public int myLogId;
     public final String ESTADO_1 = "QueroAssistir";
@@ -40,17 +31,57 @@ public class EmanuelAppl {
             "Truque de Mestre"
     };
 
-    public EmanuelAppl() {
+    public TwoAppl() {
         PubSubClient client = new PubSubClient();
         client.startConsole();
     }
 
-    
-    public EmanuelAppl(boolean flag) {
-        // Constrói um Client
-        PubSubClient usuarioNetflix = new PubSubClient(CLIENT_ADDRESS, CLIENT_PORT);
+
+    public TwoAppl(boolean flag) {
+
+
+        Scanner reader = new Scanner(System.in);  // Reading from System.in
+
+        List<String> listBrokerAddress = new ArrayList<>();
+        List<Integer> listBrokerPort = new ArrayList<>();
+
+        /*System.out.print("Enter the CLIENT_ADDRESS: ");
+        String CLIENT_ADDRESS = reader.next();
+
+        System.out.print("Enter the CLIENT_PORT number: ");
+        int CLIENT_PORT = reader.nextInt();
+
+        System.out.print("Enter the CLIENT_NAME: ");
+        String CLIENT_NAME = reader.next();
+
+        System.out.print("Enter the BROKER_ADDRESS: ");
+        String BROKER_ADDRESS = reader.next();
+        listBrokerAddress.add(BROKER_ADDRESS);
+
+        System.out.print("Enter the BROKER_PORT: ");
+        int BROKER_PORT = reader.nextInt();
+        listBrokerPort.add(BROKER_PORT);
+
+        System.out.print("Enter the SECONDARY_BROKER_ADDRESS: ");
+        String SECONDARY_BROKER_ADDRESS = reader.next();
+        listBrokerAddress.add(SECONDARY_BROKER_ADDRESS);
+
+        System.out.print("Enter the SECONDARY_BROKER_PORT: ");
+        int SECONDARY_BROKER_PORT = reader.nextInt();
+        listBrokerPort.add(SECONDARY_BROKER_PORT);*/
+
+        String CLIENT_ADDRESS = "localhost";
+        String CLIENT_NAME = "yay";
+        int CLIENT_PORT = 8083;
+        listBrokerAddress.add("localhost");
+        listBrokerAddress.add("localhost");
+        listBrokerPort.add(8080);
+        listBrokerPort.add(8081);
+
+// Constrói um Client
+        PubSubClient usuarioNetflix = new PubSubClient(CLIENT_ADDRESS, CLIENT_PORT,listBrokerAddress, listBrokerPort);
         // Se inscreve no broker
-        usuarioNetflix.subscribe(BROKER_ADDRESS, BROKER_PORT);
+        usuarioNetflix.subscribe();
         // Simulando o tempo de inscrição
         sleep(3000,"");
         // Recupera o log
@@ -89,9 +120,7 @@ public class EmanuelAppl {
                                 "0" + SEPARATOR +
                                 "0";
                 usuarioNetflix.publish(
-                        msg,
-                        BROKER_ADDRESS,
-                        BROKER_PORT
+                        msg
                 );
                 flag_log_vazio = false;
                 myLogId = log.size()+1;
@@ -114,9 +143,7 @@ public class EmanuelAppl {
                                     contentSplit[4] + SEPARATOR +
                                     contentSplit[5];
                     usuarioNetflix.publish(
-                            msg,
-                            BROKER_ADDRESS,
-                            BROKER_PORT
+                            msg
                     );
                     flag_log_vazio = false;
                     boolean flag_achou = false;
@@ -142,9 +169,7 @@ public class EmanuelAppl {
                                     contentSplit[4] + SEPARATOR +
                                     contentSplit[5];
                     usuarioNetflix.publish(
-                            msg,
-                            BROKER_ADDRESS,
-                            BROKER_PORT
+                            msg
                     );
                     flag_log_vazio = false;
                     boolean flag_achou = false;
@@ -184,9 +209,7 @@ public class EmanuelAppl {
                                     myLogId + SEPARATOR +
                                     lastContent[5];
                     usuarioNetflix.publish(
-                            msg,
-                            BROKER_ADDRESS,
-                            BROKER_PORT
+                            msg
                     );
                     flag_log_vazio = false;
                     sleep(6000, CLIENT_NAME + " esta Assistindo " + CATALOGUE[movieIndex]);
@@ -204,9 +227,7 @@ public class EmanuelAppl {
                                     "0" + SEPARATOR +
                                     myLogId;
                     usuarioNetflix.publish(
-                            msg,
-                            BROKER_ADDRESS,
-                            BROKER_PORT
+                            msg
                     );
                     flag_log_vazio = false;
                     sleep(3000,"");
@@ -218,7 +239,7 @@ public class EmanuelAppl {
             }
         }
 
-        usuarioNetflix.unsubscribe(BROKER_ADDRESS, BROKER_PORT);
+        usuarioNetflix.unsubscribe();
         usuarioNetflix.stopPubSubClient();
 
     }
@@ -273,7 +294,7 @@ public class EmanuelAppl {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        new EmanuelAppl(true);
+        new TwoAppl(true);
     }
 
 }

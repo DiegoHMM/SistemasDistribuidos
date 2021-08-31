@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -18,21 +15,24 @@ public class PubSubConsumer<S extends Socket> extends GenericConsumer<S> {
     private int uniqueLogId;
     private SortedSet<Message> log;
     private Set<String> subscribers;
+    private int primaryPort;
     private boolean isPrimary;
+    private String primaryServer;
     private String secondaryServer;
     private int secondaryPort;
 
-    public PubSubConsumer(GenericResource<S> re, boolean isPrimary, String secondaryServer, int secondaryPort) {
+    public PubSubConsumer(GenericResource<S> re, int primaryPort, boolean isPrimary,String primaryServer, String secondaryServer, int secondaryPort) {
         super(re);
         uniqueLogId = 1;
         log = new TreeSet<Message>(new MessageComparator());
         subscribers = new TreeSet<String>();
 
+        this.primaryPort = primaryPort;
         this.isPrimary = isPrimary;
+        this.primaryServer = primaryServer;
         this.secondaryServer = secondaryServer;
         this.secondaryPort = secondaryPort;
     }
-
 
     @Override
     protected void doSomething(S str) {
@@ -44,6 +44,8 @@ public class PubSubConsumer<S extends Socket> extends GenericConsumer<S> {
 
             Message response = null;
 
+
+
             if (!isPrimary && !msg.getType().startsWith("sync")) {
 
                 //Client client = new Client(secondaryServer, secondaryPort);
@@ -53,7 +55,9 @@ public class PubSubConsumer<S extends Socket> extends GenericConsumer<S> {
                 response.setType("backup");
                 response.setContent(secondaryServer + ":" + secondaryPort);
 
-            } else {
+            }
+            else
+            {
                 if (!msg.getType().equals("notify") && !msg.getType().startsWith("sync"))
                     msg.setLogId(uniqueLogId);
 

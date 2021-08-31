@@ -4,13 +4,14 @@ import core.Server;
 
 import java.util.Scanner;
 
-public class Broker {
+public class Broker2 {
 
-    public Broker() {
+    public Broker2() {
+
 
 
         Scanner reader = new Scanner(System.in);  // Reading from System.in
-        System.out.print("Enter the Broker address: ");
+       /* System.out.print("Enter the Broker address: ");
         String address = reader.next();
 
         System.out.print("Enter the Broker port number: ");
@@ -39,9 +40,10 @@ public class Broker {
             System.out.print("Enter the primary Broker port number: ");
             secondPort = reader.nextInt();
 
-        }
+        }*/
 
-        Server s = new Server(port, respBol, address, secondAddress, secondPort);
+        //Server s = new Server(port, respBol, address, secondAddress, secondPort);
+        Server s = new Server(8081, true, "localhost", "localhost", 8080);
         ThreadWrapper brokerThread = new ThreadWrapper(s);
         brokerThread.start();
 
@@ -59,7 +61,7 @@ public class Broker {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        new Broker();
+        new Broker2();
     }
 
     class ThreadWrapper extends Thread {

@@ -16,6 +16,8 @@ public class PubSubClient {
 
     private String clientAddress;
     private int clientPort;
+    private List<String> brokerAddressList;
+    private List<Integer> brokerPortList;
 
     public PubSubClient() {
         //this constructor must be called only when the method
@@ -23,63 +25,45 @@ public class PubSubClient {
         //otherwise the other constructor must be called
     }
 
-    public PubSubClient(String clientAddress, int clientPort) {
+    public PubSubClient(String clientAddress, int clientPort,List<String> brokerAddressList, List<Integer> brokerPortList) {
         this.clientAddress = clientAddress;
         this.clientPort = clientPort;
+        this.brokerAddressList = brokerAddressList;
+        this.brokerPortList = brokerPortList;
         observer = new Server(clientPort);
         clientThread = new ThreadWrapper(observer);
         clientThread.start();
+}
+
+    public void subscribe() {
+            Message msgBroker = new MessageImpl();
+            msgBroker.setBrokerId(brokerPortList.get(0));
+            msgBroker.setType("sub");
+            msgBroker.setContent(clientAddress + ":" + clientPort);
+            Client subscriber = new Client(brokerAddressList, brokerPortList);
+            Message response = subscriber.sendReceive(msgBroker);
+
     }
 
-    public void subscribe(String brokerAddress, int brokerPort) {
+    public void unsubscribe() {
 
         Message msgBroker = new MessageImpl();
-        msgBroker.setBrokerId(brokerPort);
-        msgBroker.setType("sub");
-        msgBroker.setContent(clientAddress + ":" + clientPort);
-        Client subscriber = new Client(brokerAddress, brokerPort);
-        Message response = subscriber.sendReceive(msgBroker);
-        if (response.getType().equals("backup")) {
-            brokerAddress = response.getContent().split(":")[0];
-            brokerPort = Integer.parseInt(response.getContent().split(":")[1]);
-            subscriber = new Client(brokerAddress, brokerPort);
-            subscriber.sendReceive(msgBroker);
-        }
-    }
-
-    public void unsubscribe(String brokerAddress, int brokerPort) {
-
-        Message msgBroker = new MessageImpl();
-        msgBroker.setBrokerId(brokerPort);
+        msgBroker.setBrokerId(brokerPortList.get(0));
         msgBroker.setType("unsub");
         msgBroker.setContent(clientAddress + ":" + clientPort);
-        Client subscriber = new Client(brokerAddress, brokerPort);
+        Client subscriber = new Client(brokerAddressList, brokerPortList);
         Message response = subscriber.sendReceive(msgBroker);
 
-        if (response.getType().equals("backup")) {
-            brokerAddress = response.getContent().split(":")[0];
-            brokerPort = Integer.parseInt(response.getContent().split(":")[1]);
-            subscriber = new Client(brokerAddress, brokerPort);
-            subscriber.sendReceive(msgBroker);
-        }
     }
 
-    public void publish(String message, String brokerAddress, int brokerPort) {
+    public void publish(String message) {
         Message msgPub = new MessageImpl();
-        msgPub.setBrokerId(brokerPort);
+        msgPub.setBrokerId(brokerPortList.get(0));
         msgPub.setType("pub");
         msgPub.setContent(message);
 
-        Client publisher = new Client(brokerAddress, brokerPort);
+        Client publisher = new Client(brokerAddressList, brokerPortList);
         Message response = publisher.sendReceive(msgPub);
-
-        if (response.getType().equals("backup")) {
-            brokerAddress = response.getContent().split(":")[0];
-            brokerPort = Integer.parseInt(response.getContent().split(":")[1]);
-            publisher = new Client(brokerAddress, brokerPort);
-            publisher.sendReceive(msgPub);
-        }
-
 
     }
 
@@ -108,7 +92,7 @@ public class PubSubClient {
         clientThread = new ThreadWrapper(observer);
         clientThread.start();
 
-        subscribe(brokerAddress, brokerPort);
+        subscribe();
 
         System.out.println("Do you want to subscribe for more brokers? (Y|N)");
         String resp = reader.next();
@@ -122,7 +106,7 @@ public class PubSubClient {
                 brokerAddress = reader.next();
                 System.out.print("Enter the broker port (ex.8080): ");
                 brokerPort = reader.nextInt();
-                subscribe(brokerAddress, brokerPort);
+                subscribe();
                 System.out.println(" Write exit to finish...");
                 message = reader.next();
             }
@@ -143,7 +127,7 @@ public class PubSubClient {
                 System.out.print("Enter the broker port (ex.8080): ");
                 brokerPort = reader.nextInt();
 
-                publish(message, brokerAddress, brokerPort);
+                publish(message);
 
                 List<Message> log = observer.getLogMessages();
 

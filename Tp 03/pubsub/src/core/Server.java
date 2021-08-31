@@ -14,6 +14,7 @@ public class Server {
     protected int port;
     protected ServerSocket serverSocket;
     protected boolean isPrimary;
+    protected String primaryServer;
     protected String secondaryServer;
     protected int secondaryPort;
 
@@ -26,9 +27,10 @@ public class Server {
         resource = new GenericResource<Socket>();
     }
 
-    public Server(int port, boolean isPrimary, String secondaryServer, int secondaryPort) {
+    public Server(int port, boolean isPrimary, String primaryServer, String secondaryServer, int secondaryPort) {
         this.port = port;
         this.isPrimary = isPrimary;
+        this.primaryServer = primaryServer;
         this.secondaryServer = secondaryServer;
         this.secondaryPort = secondaryPort;
 
@@ -42,7 +44,7 @@ public class Server {
 
             //just one consumer to guarantee a single
             //log write mechanism
-            consumer = new PubSubConsumer<Socket>(resource, isPrimary, secondaryServer, secondaryPort);
+            consumer = new PubSubConsumer<Socket>(resource, port, isPrimary, primaryServer, secondaryServer, secondaryPort);
 
             consumer.start();
 
